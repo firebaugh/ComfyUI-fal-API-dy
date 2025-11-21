@@ -910,7 +910,7 @@ class Wan22VACEFun14bNode:
                 "first_frame": ("IMAGE", {"default": None}),
                 "last_frame": ("IMAGE", {"default": None}),
                 "negative_prompt": ("STRING", {"default": "", "multiline": True}),
-                "seed": ("INT", {"default": 24}),
+                "seed": ("INT", {"default": 0, "min": 0, "max": 2147483647}),
                 "resolution": (
                     ["480p", "580p", "720p"],
                     {"default": "480p"}
@@ -918,6 +918,7 @@ class Wan22VACEFun14bNode:
                 "aspect_ratio": (["auto", "16:9", "9:16", "1:1"], {"default": "auto"}),
                 "num_inference_steps": ("INT", {"default": 30, "min": 1}),
                 "guidance_scale": ("FLOAT", {"default": 5, "min": 0.0, "max": 10}),
+                "sampler": (["unipc", "dpm++", "euler"], {"default": "unipc"}),
                 "match_input_num_frames": ("BOOLEAN", {"default": False}),
                 "num_frames": ("INT", {"default": 81, "min": 1, "max": 241}),
                 "match_input_frames_per_second": ("BOOLEAN", {"default": False}),
@@ -957,6 +958,7 @@ class Wan22VACEFun14bNode:
         aspect_ratio="auto",
         num_inference_steps=30,
         guidance_scale=5,
+        sampler="unipc",
         match_input_num_frames=False,
         num_frames=81,
         match_input_frames_per_second=False,
@@ -997,6 +999,7 @@ class Wan22VACEFun14bNode:
                 "aspect_ratio": aspect_ratio,
                 "num_inference_steps": num_inference_steps,
                 "guidance_scale": guidance_scale,
+                "sampler": sampler,
                 "num_frames": num_frames,
                 "frames_per_second": frames_per_second,
                 "shift": shift,
