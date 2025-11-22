@@ -1222,6 +1222,10 @@ class DYWanFun22Node:
                 "shift": shift,
                 "preprocess_all_maps": preprocess_all_maps,
                 "return_frames_zip": return_frames_zip,
+                "pose_strength": pose_strength,
+                "depth_strength": depth_strength,
+                "normal_strength": normal_strength,
+                "canny_strength": canny_strength
             }
 
             # Handle image_size - use custom dimensions if provided, otherwise use aspect_ratio preset
@@ -1245,36 +1249,24 @@ class DYWanFun22Node:
                 pose_video_url = ImageUtils.upload_file(pose_video.get_stream_source())
                 if pose_video_url:
                     arguments["pose_video_url"] = pose_video_url
-                    arguments["pose_strength"] = pose_strength
-            elif pose_strength != 0.6:
-                arguments["pose_strength"] = pose_strength
 
             # Upload and add depth video/strength if provided
             if depth_video is not None:
                 depth_video_url = ImageUtils.upload_file(depth_video.get_stream_source())
                 if depth_video_url:
                     arguments["depth_video_url"] = depth_video_url
-                    arguments["depth_strength"] = depth_strength
-            elif depth_strength != 0.0:
-                arguments["depth_strength"] = depth_strength
 
             # Upload and add normal video/strength if provided
             if normal_video is not None:
                 normal_video_url = ImageUtils.upload_file(normal_video.get_stream_source())
                 if normal_video_url:
                     arguments["normal_video_url"] = normal_video_url
-                    arguments["normal_strength"] = normal_strength
-            elif normal_strength != 0.0:
-                arguments["normal_strength"] = normal_strength
 
             # Upload and add canny video/strength if provided
             if canny_video is not None:
                 canny_video_url = ImageUtils.upload_file(canny_video.get_stream_source())
                 if canny_video_url:
                     arguments["canny_video_url"] = canny_video_url
-                    arguments["canny_strength"] = canny_strength
-            elif canny_strength != 0.0:
-                arguments["canny_strength"] = canny_strength
 
             # Add advanced interpolation settings if non-default
             if num_interpolated_frames > 0:
@@ -1311,6 +1303,93 @@ class DYWanFun22Node:
 
         except Exception as e:
             return ApiHandler.handle_video_generation_error("dy-wan-fun-22", str(e))
+
+
+class DYWanUpscalerNode:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "video": ("VIDEO", {"default": None}),
+            },
+            "optional": {
+                "prompt": ("STRING", {"default": "cinematic composition, realistic high-quality photo, RAW photo, masterpiece, photorealistic, 8k", "multiline": True}),
+                "negative_prompt": ("STRING", {"default": "oversaturated, overexposed, static, blurry details", "multiline": True}),
+                "strength": ("FLOAT", {"default": 0.02, "min": 0.0, "max": 1.0, "step": 0.01}),
+                "guidance_scale": ("FLOAT", {"default": 3.5, "min": 1.0, "max": 20.0, "step": 0.1}),
+                "num_inference_steps": ("INT", {"default": 10, "min": 1, "max": 50}),
+                "seed": ("INT", {"default": 0, "min": 0, "max": 2147483647}),
+                "fps": ("INT", {"default": 24, "min": 1, "max": 120}),
+                "image_size": (["custom", "landscape_16_9", "landscape_4_3", "portrait_16_9", "portrait_4_3", "square", "square_hd"], {"default": "custom"}),
+                "custom_width": ("INT", {"default": 1920, "min": 0, "max": 8192, "step": 8}),
+                "custom_height": ("INT", {"default": 1080, "min": 0, "max": 8192, "step": 8}),
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("video_url",)
+    FUNCTION = "upscale_video"
+    CATEGORY = "FAL/VideoGeneration/DY"
+
+    def upscale_video(
+        self,
+        video=None,
+        prompt="cinematic composition, realistic high-quality photo, RAW photo, masterpiece, photorealistic, 8k",
+        negative_prompt="oversaturated, overexposed, static, blurry details",
+        strength=0.02,
+        guidance_scale=3.5,
+        num_inference_steps=10,
+        seed=0,
+        fps=24,
+        image_size="custom",
+        custom_width=1920,
+        custom_height=1080
+    ):
+        try:
+            if video is None:
+                return ApiHandler.handle_video_generation_error(
+                    "dy-wan-upscaler", "Video input is required."
+                )
+
+            # Upload video
+            video_url = ImageUtils.upload_file(video.get_stream_source())
+            if not video_url:
+                return ApiHandler.handle_video_generation_error(
+                    "dy-wan-upscaler", "Failed to upload video"
+                )
+
+            # Build arguments
+            arguments = {
+                "video_url": video_url,
+                "prompt": prompt,
+                "negative_prompt": negative_prompt,
+                "strength": strength,
+                "guidance_scale": guidance_scale,
+                "num_inference_steps": num_inference_steps,
+                "fps": fps,
+            }
+
+            # Add seed if non-zero
+            if seed > 0:
+                arguments["seed"] = seed
+
+            # Handle image_size - use custom dimensions if provided, otherwise use preset
+            if image_size == "custom":
+                arguments["image_size"] = {"width": custom_width, "height": custom_height}
+            else:
+                arguments["image_size"] = image_size
+
+            # Submit to API
+            result = ApiHandler.submit_and_get_result(
+                "fal-ai/dy-wan-upscaler",
+                arguments,
+            )
+
+            video_url = result["video"]["url"]
+            return (video_url,)
+
+        except Exception as e:
+            return ApiHandler.handle_video_generation_error("dy-wan-upscaler", str(e))
 
 
 # =============================================================================
