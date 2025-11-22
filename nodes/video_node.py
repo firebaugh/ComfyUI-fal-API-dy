@@ -1310,9 +1310,10 @@ class DYWanUpscalerNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "video": ("VIDEO", {"default": None}),
             },
             "optional": {
+                "video": ("VIDEO", {"default": None}),
+                "video_url": ("STRING", {"default": ""}),
                 "prompt": ("STRING", {"default": "cinematic composition, realistic high-quality photo, RAW photo, masterpiece, photorealistic, 8k", "multiline": True}),
                 "negative_prompt": ("STRING", {"default": "oversaturated, overexposed, static, blurry details", "multiline": True}),
                 "strength": ("FLOAT", {"default": 0.02, "min": 0.0, "max": 1.0, "step": 0.01}),
@@ -1334,6 +1335,7 @@ class DYWanUpscalerNode:
     def upscale_video(
         self,
         video=None,
+        video_url="",
         prompt="cinematic composition, realistic high-quality photo, RAW photo, masterpiece, photorealistic, 8k",
         negative_prompt="oversaturated, overexposed, static, blurry details",
         strength=0.02,
@@ -1346,17 +1348,18 @@ class DYWanUpscalerNode:
         custom_height=1080
     ):
         try:
-            if video is None:
+            if video is None and video_url == "":
                 return ApiHandler.handle_video_generation_error(
                     "dy-wan-upscaler", "Video input is required."
                 )
 
             # Upload video
-            video_url = ImageUtils.upload_file(video.get_stream_source())
-            if not video_url:
-                return ApiHandler.handle_video_generation_error(
-                    "dy-wan-upscaler", "Failed to upload video"
-                )
+            if video:
+                video_url = ImageUtils.upload_file(video.get_stream_source())
+                if not video_url:
+                    return ApiHandler.handle_video_generation_error(
+                        "dy-wan-upscaler", "Failed to upload video"
+                    )
 
             # Build arguments
             arguments = {
