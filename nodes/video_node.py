@@ -1225,11 +1225,8 @@ class DYWanFun22Node:
             }
 
             # Handle image_size - use custom dimensions if provided, otherwise use aspect_ratio preset
-            if "image_size" == "custom":
-                arguments["image_size"] = {
-                    "width": custom_width,
-                    "height": custom_height
-                }
+            if image_size == "custom":
+                arguments["image_size"] = {"width": custom_width, "height": custom_height}
             else:
                 arguments["image_size"] = image_size
 
