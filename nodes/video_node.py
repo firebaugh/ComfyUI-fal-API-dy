@@ -1100,9 +1100,9 @@ class DYWanFun22Node:
                 "turbo_mode": ("BOOLEAN", {"default": True}),
                 "prompt": ("STRING", {"default": "", "multiline": True}),
                 "negative_prompt": ("STRING", {"default": "", "multiline": True}),
-                "aspect_ratio": (["square_hd", "square", "portrait_4_3", "portrait_16_9", "landscape_4_3", "landscape_16_9"], {"default": "square"}),
-                "custom_width": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 8}),
-                "custom_height": ("INT", {"default": 0, "min": 0, "max": 8192, "step": 8}),
+                "image_size": (["custom", "square_hd", "square", "portrait_4_3", "portrait_16_9", "landscape_4_3", "landscape_16_9"], {"default": "custom"}),
+                "custom_width": ("INT", {"default": 1280, "min": 0, "max": 8192, "step": 8}),
+                "custom_height": ("INT", {"default": 720, "min": 0, "max": 8192, "step": 8}),
                 "num_frames": ("INT", {"default": 81, "min": 1, "max": 1000}),
                 "frames_per_second": ("INT", {"default": 16, "min": 5, "max": 30}),
                 "num_inference_steps": ("INT", {"default": 4, "min": 1, "max": 100}),
@@ -1155,9 +1155,9 @@ class DYWanFun22Node:
         turbo_mode=True,
         prompt="",
         negative_prompt="",
-        aspect_ratio="square",
-        custom_width=512,
-        custom_height=512,
+        image_size="custom",
+        custom_width=1280,
+        custom_height=720,
         num_frames=81,
         frames_per_second=16,
         num_inference_steps=4,
@@ -1225,13 +1225,13 @@ class DYWanFun22Node:
             }
 
             # Handle image_size - use custom dimensions if provided, otherwise use aspect_ratio preset
-            if custom_width > 0 and custom_height > 0:
+            if "image_size" == "custom":
                 arguments["image_size"] = {
                     "width": custom_width,
                     "height": custom_height
                 }
             else:
-                arguments["image_size"] = aspect_ratio
+                arguments["image_size"] = image_size
 
             # Upload control video if provided
             if control_video is not None:
