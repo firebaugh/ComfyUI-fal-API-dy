@@ -345,7 +345,7 @@ class KlingMasterNode:
                 "kling-video/v2/master", str(e)
             )
         
-class KlingO1ImageToVideoNode:
+class KlingOmniImageToVideoNode:
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -396,7 +396,7 @@ class KlingO1ImageToVideoNode:
                 "kling-video/o1/image-to-video", str(e)
             )
 
-class KlingO1ReferenceToVideoNode:
+class KlingOmniReferenceToVideoNode:
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -499,7 +499,7 @@ class KlingO1ReferenceToVideoNode:
                 "kling-video/o1/reference-to-video", str(e)
             )
 
-class KlingO1VideoToVideoEditNode:
+class KlingOmniVideoToVideoEditNode:
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -597,7 +597,7 @@ class KlingO1VideoToVideoEditNode:
                 "kling-video/o1/video-to-video/edit", str(e)
             )
 
-class KlingO1VideoToVideoReferenceNode:
+class KlingOmniVideoToVideoReferenceNode:
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -3001,10 +3001,10 @@ NODE_CLASS_MAPPINGS = {
     "KlingPro10_fal": KlingPro10Node,
     "KlingPro16_fal": KlingPro16Node,
     "KlingMaster_fal": KlingMasterNode,
-    "KlingO1ImageToVideo_fal": KlingO1ImageToVideoNode,
-    "KlingO1ReferenceToVideo_fal": KlingO1ReferenceToVideoNode,
-    "KlingO1VideoToVideoEdit_fal": KlingO1VideoToVideoEditNode,
-    "KlingO1VideoToVideoReference_fal": KlingO1VideoToVideoReferenceNode,
+    "KlingOmniImageToVideo_fal": KlingOmniImageToVideoNode,
+    "KlingOmniReferenceToVideo_fal": KlingOmniReferenceToVideoNode,
+    "KlingOmniVideoToVideoEdit_fal": KlingOmniVideoToVideoEditNode,
+    "KlingOmniVideoToVideoReference_fal": KlingOmniVideoToVideoReferenceNode,
     "Krea_Wan14b_VideoToVideo_fal": KreaWan14bVideoToVideoNode,
     "RunwayGen3_fal": RunwayGen3Node,
     "LumaDreamMachine_fal": LumaDreamMachineNode,
@@ -3044,10 +3044,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "KlingPro10_fal": "Kling Pro v1.0 Video Generation (fal)",
     "KlingPro16_fal": "Kling Pro v1.6 Video Generation (fal)",
     "KlingMaster_fal": "Kling Master v2.0 Video Generation (fal)",
-    "KlingO1ImageToVideo_fal": "Kling O1 Image-to-Video (fal)",
-    "KlingO1ReferenceToVideo_fal": "Kling O1 Reference-to-Video (fal)",
-    "KlingO1VideoToVideoEdit_fal": "Kling O1 Video-to-Video Edit (fal)",
-    "KlingO1VideoToVideoReference_fal": "Kling O1 Video-to-Video Reference (fal)",
+    "KlingOmniImageToVideo_fal": "Kling Omni Image-to-Video (fal)",
+    "KlingOmniReferenceToVideo_fal": "Kling Omni Reference-to-Video (fal)",
+    "KlingOmniVideoToVideoEdit_fal": "Kling Omni Video-to-Video Edit (fal)",
+    "KlingOmniVideoToVideoReference_fal": "Kling Omni Video-to-Video Reference (fal)",
     "Krea_Wan14b_VideoToVideo_fal": "Krea Wan 14b Video-to-Video (fal)",
     "RunwayGen3_fal": "Runway Gen3 Image-to-Video (fal)",
     "LumaDreamMachine_fal": "Luma Dream Machine (fal)",
